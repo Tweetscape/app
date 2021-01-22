@@ -2,7 +2,8 @@ const express = require('express')
 const app = express()
 const passport = require('passport')
 const {
-  users
+  users,
+  lists
 } = require('./controllers')
 
 /**
@@ -48,13 +49,11 @@ app.options(`*`, (req, res) => {
   res.status(200).send()
 })
 
-app.post(`/users/register`, asyncHandler(users.register))
 
 app.post(`/users/login`, asyncHandler(users.login))
-
-app.get(`/test/`, (req, res) => {
-  res.status(200).send('Request received')
-})
+app.get(`/list/:list_id/:count`, asyncHandler(lists.getListData))
+app.get(`/mylists`, asyncHandler(lists.getMyLists))
+app.get(`/featuredLists`, asyncHandler(lists.getFeaturedLists))
 
 /**
  * Routes - Protected

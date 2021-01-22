@@ -1,0 +1,53 @@
+.container {
+    width: 100%;
+    background-color: white;
+    min-height: calc(100vh - 97px);
+    color: black;
+}
+
+.main {
+    display: flex;
+    flex-direction: row;
+    max-width: 1400px;
+    margin: auto;
+    position: relative;
+}
+
+.leftColumn {
+    border: 1px solid black;
+    height: 500px;
+    width: 360px;
+    position: sticky;
+    top: 80px;
+    left: 0;
+}
+
+.twitterCard {
+    width: 600px;
+    height: 280px;
+    border-radius: 20px;
+    margin: 0 70px 70px;
+    border: 1px solid black;
+}
+
+.mainFeed {
+    height: 200vh;
+}
+
+.leftHeader {
+    display: flex;
+    flex-direction: row;
+    background-color: #FCF7F8;
+    justify-content: space-around;
+}
+
+.headerButton {
+    padding: 15px;
+    color: #0E131F;
+    cursor: pointer;
+}
+
+.headerButton:hover {
+    border-bottom: 3px solid lightgray;
+    border-bottom: 1px solid black;
+}
