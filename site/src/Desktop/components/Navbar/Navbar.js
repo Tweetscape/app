@@ -8,11 +8,15 @@ export default function Navbar({ }) {
     return (
         <div className={styles.container}>
             <div className={styles.wrapper}>
-                <div className={styles.name}>Tweetscape</div>
+                <Link to="/">
+                    <div className={styles.name}>Tweetscape</div>
+                </Link>
                 <div className={styles.rightContainer}>
-                    <div>About</div>
-                    <Link to="/">
-                        <div>Launch App</div>
+                    <Link to="/about">
+                        <div>About</div>
+                    </Link>
+                    <Link to="/dashboard">
+                        <div style={{ fontWeight: "bold" }}>Launch App</div>
                     </Link>
                 </div>
             </div>

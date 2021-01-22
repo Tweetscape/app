@@ -15,7 +15,7 @@ export default class App extends Component {
     return (
       <Router>
         <Switch>
-          <Route exact path='/'>
+          <Route path='/'>
             <MediaQuery minWidth={720}>
               <Desktop />
             </MediaQuery>
