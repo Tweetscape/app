@@ -74,8 +74,35 @@ const get = async (req, res, next) => {
   res.json({ user })
 }
 
+const findOrCreate = ({ twitterId }, cb) => {
+  const obj = (
+    {
+      username: "Test the Auth",
+      id: 0,
+      twitterId
+    }
+  )
+
+  cb(null, obj)
+}
+
+
+const findById = (twitterId, cb) => {
+  const obj = (
+    {
+      username: "Test the Auth",
+      id: 0,
+      twitterId
+    }
+  )
+
+  cb(null, obj)
+}
+
 module.exports = {
   register,
   login,
   get,
+  findOrCreate,
+  findById
 }

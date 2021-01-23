@@ -4,6 +4,8 @@ import { Link, Switch, Route } from 'react-router-dom'
 
 import styles from './style.module.css'
 
+const twitterLoginUrl = "https://7ta28wx6t4.execute-api.us-east-1.amazonaws.com/auth/twitter"
+
 export default function Navbar({ }) {
     return (
         <div className={styles.container}>
@@ -17,7 +19,7 @@ export default function Navbar({ }) {
                     </Link>
                     <Switch>
                         <Route path="/dashboard">
-                            <div style={{ fontWeight: "bold" }}>Sign In</div>
+                            <a href={twitterLoginUrl}><div style={{ fontWeight: "bold" }}>Sign In</div></a>
                         </Route>
                         <Route path="*">
                             <Link to="/dashboard">
