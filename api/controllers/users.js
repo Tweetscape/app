@@ -78,7 +78,7 @@ const findOrCreate = ({ twitterId }, cb) => {
   const obj = (
     {
       username: "Test the Auth",
-      id: 0,
+      id: twitterId,
       twitterId
     }
   )

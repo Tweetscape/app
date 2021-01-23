@@ -16,3 +16,6 @@ inputs:
     dbIndex1: ${output:database.indexes.gsi1.name}
     # A secret token to sign the JWT tokens with.
     tokenSecret: secret_1234 # Change to secret via environment variable: ${env:tokenSecret}
+    twitterKey: ${param:twitterKey}
+    twitterSecret: ${param:twitterSecret}
+    twitterCallback: ${param:twitterCallback}

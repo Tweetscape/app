@@ -12,48 +12,37 @@ const {
 
 const authRoutes = require('./routes/auth-routes')
 
-/**
- * Configure Passport
- */
-
 app.use(session({ 
   saveUninitialized: true,
   secret: 'melody hensley is my spirit animal' 
 }));
 
-// try { require('./config/passport')(passport) }
-// catch (error) { console.log(error) }
-
 passport.serializeUser(function(user, done) {
+  console.log('serialize user: ', user)
   done(null, user.id);
 });
 
 passport.deserializeUser(function(id, done) {
+  console.log('deserialize user: ', id)
   users.findById(id, function(err, user) {
     done(err, user);
   });
 });
 
 passport.use(new TwitterStrategy({
-  consumerKey: "m3nTmPs8UpxT9W2CWmtEZ6x8z", //TWITTER_CONSUMER_KEY,
-  consumerSecret: "n7Kosz80d3MAfVs7nW2JYuBEMVM4vqAU3LvSh1E7KwzKPlrkYA", //TWITTER_CONSUMER_SECRET,
-  callbackURL: "https://7ta28wx6t4.execute-api.us-east-1.amazonaws.com/auth/twitter/callback"
+  consumerKey: process.env.twitterKey,
+  consumerSecret: process.env.twitterSecret,
+  callbackURL: process.env.twitterCallback
 },
 function(token, tokenSecret, profile, done) {
-    // user ... find or create 
-    console.log('passport initialization!')
-    console.log('token: ', token)
-    console.log('secret: ', tokenSecret)
     console.log('profile: ', profile)
-
-    // return done(null, { twitterId: profile.id, name: "Ben" })
 
     users.findOrCreate({ twitterId: profile.id }, function(err, user) {
       if (err) { 
         console.log('err finding or creating user: ', err)
         return done(err) 
       }
-      console.log('user has authenticating: ', user)
+      console.log('user has authenticated: ', user)
       return done(err, user)
     })
   }
@@ -76,8 +65,6 @@ app.use(passport.session())
 // Enable JSON use
 app.use(express.json())
 
-// Since Express doesn't support error handling of promises out of the box,
-// this handler enables that
 const asyncHandler = fn => (req, res, next) => {
   return Promise
     .resolve(fn(req, res, next))
@@ -91,7 +78,7 @@ app.options(`*`, (req, res) => {
 app.post(`/users/login`, asyncHandler(users.login))
 app.get(`/list/:list_id/:count`, asyncHandler(lists.getListData))
 app.get(`/featuredLists`, asyncHandler(lists.getFeaturedLists))
-app.get(`/mylists`, passport.authenticate('twitter'), asyncHandler(lists.getMyLists))
+app.get(`/mylists`, asyncHandler(lists.getMyLists))
 
 
 app.get('/auth/twitter/callback', 

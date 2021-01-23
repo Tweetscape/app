@@ -1,14 +1,3 @@
-// auth/twitter => authenticate with passport
-
-// auth/login/success => returns login success response  with user info
-
-// auth/login/failed => failed message 
-
-// auth/logout => logout & redirect 
-
-// auth/twitter/redirect => redirect to home page if login succeeded
-
-
 const authenticate = async (req, res, next) => {
     try {
         res.status(200).send()
@@ -19,9 +8,6 @@ const authenticate = async (req, res, next) => {
 
 const loginSuccess = async (req, res, next) => {
     try {
-        console.log('a very successful login indeed: ', req)
-        // redirect the user to the dashboard screen 
-        // res.status(200).send()
         res.status(301).redirect('https://d3oz1l1pvg13xf.cloudfront.net/dashboard')
     } catch (error) {
         console.log('error logging in!: ', error)

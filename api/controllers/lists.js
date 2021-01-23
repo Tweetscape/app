@@ -11,9 +11,22 @@ const getFeaturedLists = async (req, res, next) => {
 }
 
 const getMyLists = async (req, res, next) => {
-
     try {
-        const myLists = lists.getMyLists()
+        console.log('request - user: ', req.user)
+        if (!req.user) {
+            res.json({})
+        }
+
+        console.log('user: ', req.session)
+        console.log('passport: ', req.session.passport)
+
+        if (!req.session || !req.session.passport) {
+            res.json({})
+        }
+
+        const userId = req.session.passport.user
+        console.log('user id from user: ', userId)
+        const myLists = await lists.getMyLists(userId)
         res.json({ myLists })
     } catch (error) {
         console.log('error getting myLists: ', error)        
