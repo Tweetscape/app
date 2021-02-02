@@ -12,6 +12,10 @@ import Mobile from 'Mobile/index'
 
 export default class App extends Component {
   render() {
+
+    console.log('backend url: ', process.env.REACT_APP_BACKEND_URL)
+    console.log('backend url: ', process.env.REACT_APP_TEST)
+
     return (
       <Router>
         <Switch>

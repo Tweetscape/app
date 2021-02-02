@@ -4,7 +4,7 @@ import { Link, Switch, Route } from 'react-router-dom'
 
 import styles from './style.module.css'
 
-const twitterLoginUrl = "https://7ta28wx6t4.execute-api.us-east-1.amazonaws.com/auth/twitter"
+const twitterLoginUrl = "https://h27pptsq0k.execute-api.us-east-1.amazonaws.com/auth/twitter"
 
 export default function Navbar({ }) {
     return (
