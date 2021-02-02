@@ -57,7 +57,7 @@ passport.use(new TwitterStrategy({
   consumerSecret: process.env.twitterSecret,
   callbackURL: process.env.twitterCallback
 },
-function(token, tokenSecret, profile, done) {
+async function(token, tokenSecret, profile, done) {
     const { id, username, displayName } = profile 
     
     try {
