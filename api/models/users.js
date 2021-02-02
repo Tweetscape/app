@@ -52,7 +52,7 @@ const getUserByTwitterId = async (userId) => {
     const params = {
       Key: {
         "twitter_id": {
-          S: userId
+          N: userId
         }
       },
       TableName: "users-table-dev-users"

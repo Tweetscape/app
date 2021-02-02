@@ -11,7 +11,7 @@ inputs:
   # Simple, single-table design
   attributeDefinitions:
     - AttributeName: twitter_id
-      AttributeType: S
+      AttributeType: N
   keySchema:
     - AttributeName: twitter_id
       KeyType: HASH

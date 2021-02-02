@@ -10,7 +10,7 @@ const findOrCreate = async ({ id, username, displayName }) => {
       throw new Error("user not provided")
     }
 
-
+    console.log('calling find or create function')
     return await users.findOrCreate({ id, username, displayName })
   } catch (error) {
     console.log("error finding or creating user: (user)", user)
