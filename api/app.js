@@ -33,7 +33,7 @@ passport.serializeUser(function(user, done) {
   done(null, user.id);
 });
 
-passport.deserializeUser(function(id, done) {
+passport.deserializeUser(async function(id, done) {
   console.log('deserialize user: ', id)
 
   let user
