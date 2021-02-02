@@ -1,0 +1,17 @@
+component: aws-dynamodb
+app: tweetscape-app
+org: tweetscape
+name: users-table
+
+inputs:
+  name: ${name}-${stage}-users
+  region: us-east-1
+  # Don't delete the Database Table if "serverless remove" is run
+  deletionPolicy: retain
+  # Simple, single-table design
+  attributeDefinitions:
+    - AttributeName: twitter_id
+      AttributeType: S
+  keySchema:
+    - AttributeName: twitter_id
+      KeyType: HASH

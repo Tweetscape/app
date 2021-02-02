@@ -7,8 +7,10 @@ const authenticate = async (req, res, next) => {
 }
 
 const loginSuccess = async (req, res, next) => {
+    // const url = "https://djdd1ix41h8xd.cloudfront.net/dashboard"
+    const url = "http://localhost:3000/dashboard"
     try {
-        res.status(301).redirect('https://d3oz1l1pvg13xf.cloudfront.net/dashboard')
+        res.status(301).redirect(url)
     } catch (error) {
         console.log('error logging in!: ', error)
     }

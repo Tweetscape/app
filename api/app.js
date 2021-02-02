@@ -1,3 +1,4 @@
+const cookieSession = require("cookie-session")
 const express = require('express')
 const session = require('express-session')
 const app = express()
@@ -12,6 +13,16 @@ const {
 
 const authRoutes = require('./routes/auth-routes')
 
+const COOKIE_KEY = "thisappisawesome"
+
+app.use(
+  cookieSession({
+    name: "session",
+    keys: [COOKIE_KEY],
+    maxAge: 24 * 60 * 60 * 100
+  })
+);
+
 app.use(session({ 
   saveUninitialized: true,
   secret: 'melody hensley is my spirit animal' 
@@ -24,9 +35,21 @@ passport.serializeUser(function(user, done) {
 
 passport.deserializeUser(function(id, done) {
   console.log('deserialize user: ', id)
-  users.findById(id, function(err, user) {
-    done(err, user);
-  });
+
+  let user
+  let err 
+
+  try {
+    user = await users.getUserByTwitterId(id)
+  } catch (error) {
+    err = error 
+    console.log('error deserializing user: ', error)
+  }
+  
+  done(err, user)
+  // users.findById(id, function(err, user) {
+  //   done(err, user);
+  // });
 });
 
 passport.use(new TwitterStrategy({
@@ -35,16 +58,16 @@ passport.use(new TwitterStrategy({
   callbackURL: process.env.twitterCallback
 },
 function(token, tokenSecret, profile, done) {
-    console.log('profile: ', profile)
+    const { id, username, displayName } = profile 
+    
+    try {
+      const results = await users.findOrCreate({ id, username, displayName })
+      console.log('result: ', results)
+      done(null, profile)
+    } catch (error) {
+      console.log('error fetching user stuff: ', error)
+    }
 
-    users.findOrCreate({ twitterId: profile.id }, function(err, user) {
-      if (err) { 
-        console.log('err finding or creating user: ', err)
-        return done(err) 
-      }
-      console.log('user has authenticated: ', user)
-      return done(err, user)
-    })
   }
 ))
 
