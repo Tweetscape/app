@@ -1,7 +1,7 @@
 const users = require('../models/users')
 
-const getUser = async (user) => {
-  await users.getUser(user)
+const getUserByTwitterId = async (user) => {
+  await users.getUserByTwitterId(user)
 }
 
 const findOrCreate = async (user) => {
@@ -17,7 +17,7 @@ const findOrCreate = async (user) => {
 }
 
 module.exports = {
-  getUser,
+  getUserByTwitterId,
   findOrCreate
 }
 
