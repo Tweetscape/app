@@ -16,7 +16,7 @@ const dynamodb = new AWS.DynamoDB.DocumentClient({
 const findOrCreate = async ({ id, username, displayName }) => {
   try {
     console.log('find or create user: ', user)
-    const existingUser = await getUser(id)
+    const existingUser = await getUserByTwitterId(id)
   
     if (existingUser) {
       return existingUser

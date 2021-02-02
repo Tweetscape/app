@@ -7,7 +7,3 @@ inputs:
   name: ${name}-${stage}-users
   region: us-east-1
   service: lambda.amazonaws.com
-  policy: arn:aws:iam::aws:policy/AdministratorAccess
-  Resource:
-    - ${output:database.arn}
-    - ${output:database.arn}/index/*

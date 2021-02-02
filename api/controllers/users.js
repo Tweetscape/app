@@ -4,13 +4,14 @@ const getUserByTwitterId = async (user) => {
   await users.getUserByTwitterId(user)
 }
 
-const findOrCreate = async (user) => {
+const findOrCreate = async ({ id, username, displayName }) => {
   try {
     if (!user) {
       throw new Error("user not provided")
     }
 
-    return await users.registerUser(user)
+
+    return await users.findOrCreate({ id, username, displayName })
   } catch (error) {
     console.log("error finding or creating user: (user)", user)
   }
