@@ -13,7 +13,7 @@ inputs:
     - AttributeName: user_id
       AttributeType: S
     - AttributeName: twitter_id
-      AttributeType: S 
+      AttributeType: N 
   keySchema:
     - AttributeName: user_id
       KeyType: HASH
