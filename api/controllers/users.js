@@ -6,14 +6,17 @@ const getUserByTwitterId = async (user) => {
 
 const findOrCreate = async ({ id, username, displayName }) => {
   try {
-    if (!user) {
+    if (!id) {
       throw new Error("user not provided")
     }
 
+    console.log('typeof id: ', typeof id)
+
     console.log('calling find or create function')
-    return await users.findOrCreate({ id, username, displayName })
+    const result = await users.findOrCreate({ id, username, displayName })
+    console.log(JSON.stringify(result))
   } catch (error) {
-    console.log("error finding or creating user: (user)", user)
+    console.log("error finding or creating user: (user)", error)
   }
 }
 

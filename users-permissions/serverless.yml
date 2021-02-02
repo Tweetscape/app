@@ -4,6 +4,6 @@ app: tweetscape-app
 org: tweetscape
 
 inputs:
-  name: ${name}-${stage}-users
+  name: ${name}-${stage}-twitter-users
   region: us-east-1
   service: lambda.amazonaws.com

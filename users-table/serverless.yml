@@ -4,23 +4,14 @@ org: tweetscape
 name: users-table
 
 inputs:
-  name: ${name}-${stage}-users
+  name: ${name}-${stage}-twitter-users
   region: us-east-1
   # Don't delete the Database Table if "serverless remove" is run
   deletionPolicy: retain
   # Simple, single-table design
   attributeDefinitions:
-    - AttributeName: user_id
-      AttributeType: S
     - AttributeName: twitter_id
-      AttributeType: N 
+      AttributeType: S 
   keySchema:
-    - AttributeName: user_id
+    - AttributeName: twitter_id
       KeyType: HASH
-  globalSecondaryIndexes:
-    - IndexName: gsi1
-      KeySchema:
-        - AttributeName: twitter_id
-          KeyType: HASH
-      Projection:
-        ProjectionType: ALL

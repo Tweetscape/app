@@ -40,14 +40,14 @@ passport.deserializeUser(async function(id, done) {
   let err 
 
   try {
-    user = await users.getUserByTwitterId(id)
+    user = await users.findOrCreate(id)
     console.log('user: ', user)
   } catch (error) {
     err = error 
     console.log('error deserializing user: ', error)
   }
   
-  done(err, user)
+  done(err, { twitter_id: id })
   // users.findById(id, function(err, user) {
   //   done(err, user);
   // });
