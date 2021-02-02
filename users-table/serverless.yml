@@ -10,8 +10,15 @@ inputs:
   deletionPolicy: retain
   # Simple, single-table design
   attributeDefinitions:
-    - AttributeName: twitter_id
-      AttributeType: N
+    - AttributeName: user_id
+      AttributeType: S
   keySchema:
-    - AttributeName: twitter_id
+    - AttributeName: user_id
       KeyType: HASH
+  globalSecondaryIndexes:
+    - IndexName: gsi1
+      KeySchema:
+        - AttributeName: twitter_id
+          KeyType: HASH
+      Projection:
+        ProjectionType: ALL

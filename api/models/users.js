@@ -28,7 +28,7 @@ const findOrCreate = async ({ id, username, displayName }) => {
       TableName: "users-table-dev-users",
       Item: {
         user_id: uuidv4(),
-        twitter_id: id.toString(),
+        twitter_id: id,
         username,
         display_name: displayName,
         sk2: shortid.generate(),
@@ -49,10 +49,12 @@ const getUserByTwitterId = async (userId) => {
       throw new Error('error no userid provided')
     }
   
+    console.log('typeof: ', typeof userId)
+
     const params = {
       Key: {
         "twitter_id": {
-          S: userId.toString()
+          N: userId
         }
       },
       TableName: "users-table-dev-users"
