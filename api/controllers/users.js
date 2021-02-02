@@ -1,4 +1,4 @@
-import users from '../models/users/'
+const users = require('../models/users/')
 
 const getUser = async (user) => {
   await users.getUser(user)
