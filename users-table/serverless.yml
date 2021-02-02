@@ -12,6 +12,8 @@ inputs:
   attributeDefinitions:
     - AttributeName: user_id
       AttributeType: S
+    - AttributeName: twitter_id
+      AttributeType: S 
   keySchema:
     - AttributeName: user_id
       KeyType: HASH

@@ -28,7 +28,7 @@ const findOrCreate = async ({ id, username, displayName }) => {
       TableName: "users-table-dev-users",
       Item: {
         user_id: uuidv4(),
-        twitter_id: id,
+        twitter_id: id.toString(),
         username,
         display_name: displayName,
         sk2: shortid.generate(),
@@ -54,7 +54,7 @@ const getUserByTwitterId = async (userId) => {
     const params = {
       Key: {
         "twitter_id": {
-          N: userId
+          S: userId.toString()
         }
       },
       TableName: "users-table-dev-users"
