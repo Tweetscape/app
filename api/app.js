@@ -15,6 +15,8 @@ const authRoutes = require('./routes/auth-routes')
 
 const COOKIE_KEY = "thisappisawesome"
 
+const CLIENT_HOME_PAGE_URL = "http://localhost:3000/dashboard";
+
 app.use(
   cookieSession({
     name: "session",
@@ -107,7 +109,7 @@ app.get(`/mylists`, asyncHandler(lists.getMyLists))
 
 app.get('/auth/twitter/callback', 
     passport.authenticate('twitter', {
-        successRedirect: '/auth/login/success',
+        successRedirect: CLIENT_HOME_PAGE_URL, //'/auth/login/success',
         failureRedirect: '/auth/login/failed'
     }))
 

@@ -16,11 +16,12 @@ const dynamodb = new AWS.DynamoDB.DocumentClient({
 const findOrCreate = async ({ id, username, displayName }) => {
   try {
     console.log('find or create user of id: ', id)
-    // const existingUser = await getUserByTwitterId(id)
+    const existingUser = await getUserByTwitterId(id)
   
-    // if (existingUser) {
-    //   return existingUser
-    // }
+    if (existingUser) {
+      console.log('existing user: ', existingUser)
+      return existingUser
+    }
   
     console.log('creating user with twitter_id: ', id)
   
@@ -53,7 +54,7 @@ const getUserByTwitterId = async (userId) => {
     const params = {
       TableName: "users-table-dev-twitter-users",
       Key: {
-        twitter_id: { "S" : userId }
+        twitter_id: { "S": "users-table-dev-twitter-users" }
       }
     }
 
