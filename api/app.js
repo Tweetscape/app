@@ -28,7 +28,11 @@ app.use(
 app.use(cookieParser())
 
 
-app.use(session({ secret: 'anything' }))
+app.use(session({ 
+  secret: 'keyboard cat',
+  resave: false,
+  saveUninitialized: true,  
+}))
 // initialize passport
 app.use(passport.initialize())
 // deserialize cookie from the browser
