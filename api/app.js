@@ -117,7 +117,7 @@ app.get('/auth/login/success', asyncHandler(auth.loginSuccess))
 app.get('/auth/login/failed', asyncHandler(auth.loginFailure))
     
 
-// app.use('/auth', authRoutes)
+app.use('/auth', authRoutes)
 
 /**
  * Routes - Protected
