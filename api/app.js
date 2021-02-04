@@ -4,6 +4,7 @@ const session = require('express-session')
 const cors = require('cors')
 const app = express()
 const cookieParser = require("cookie-parser");
+const passportSetup = require("./config/passport-setup");
 const passport = require('passport')
   , TwitterStrategy = require('passport-twitter').Strategy
 
