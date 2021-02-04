@@ -1,7 +1,11 @@
 const users = require('../models/users')
 
 const getUserByTwitterId = async (user) => {
-  await users.getUserByTwitterId(user)
+  try {
+    return await users.getUserByTwitterId(user)
+  } catch (error) {
+    console.log('error fetching user by twitter id: ', error)
+  }
 }
 
 const findOrCreate = async ({ id, username, displayName }) => {

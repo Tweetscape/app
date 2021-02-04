@@ -42,7 +42,7 @@ passport.deserializeUser(async function(id, done) {
   let err 
 
   try {
-    user = await users.findOrCreate(id)
+    user = await users.getUserByTwitterId(id)
     console.log('user: ', user)
   } catch (error) {
     err = error 
@@ -117,7 +117,7 @@ app.get('/auth/login/success', asyncHandler(auth.loginSuccess))
 app.get('/auth/login/failed', asyncHandler(auth.loginFailure))
     
 
-app.use('/auth', authRoutes)
+// app.use('/auth', authRoutes)
 
 /**
  * Routes - Protected
