@@ -21,7 +21,7 @@ export default function Dashboard({ }) {
             }    
         }
 
-        getIt()
+        // getIt()
     }, [])
 
     return ( 

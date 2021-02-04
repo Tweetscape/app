@@ -10,6 +10,7 @@ const authenticate = async (req, res, next) => {
 
 const loginSuccess = async (req, res, next) => {
     if (req.user) {
+        console.log('user: ', req.user)
         res.json({
             success: true,
             message: "user has successfully authenticated",

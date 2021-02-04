@@ -15,6 +15,7 @@ passport.serializeUser(function(user, done) {
   
     try {
       user = await users.getUserByTwitterId(id)
+      console.log('deserialized user object: ', user)
       done(null, user)
     } catch (error) {
       console.log('error deserializing the user: ', error)
