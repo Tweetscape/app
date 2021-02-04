@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-
+import axios from 'axios'
 import styles from './style.module.css'
 import TwitterCard from 'Desktop/components/TwitterCard/TwitterCard'
 
@@ -13,35 +13,9 @@ export default function Dashboard({ }) {
     const [authenticated, setAuthenticated] = useState(false)
 
     useEffect(() => {
-        // fetch("http://localhost:4000/auth/login/success", {
-        //   method: "GET",
-        //   credentials: "include",
-        //   headers: {
-        //     Accept: "application/json",
-        //     "Content-Type": "application/json",
-        //     "Access-Control-Allow-Credentials": true
-        //   }
-        // })
-        //   .then(response => {
-        //     if (response.status === 200) return response.json();
-        //     throw new Error("failed to authenticate user");
-        //   })
-        //   .then(responseJson => {
-        //     this.setState({
-        //       authenticated: true,
-        //       user: responseJson.user
-        //     });
-        //   })
-        //   .catch(error => {
-        //     this.setState({
-        //       authenticated: false,
-        //       error: "Failed to authenticate user"
-        //     });
-        //   });
-
         async function getIt() {
             try {
-                const response = await fetch("https://h27pptsq0k.execute-api.us-east-1.amazonaws.com/mylists", {
+                const response = await axios("https://h27pptsq0k.execute-api.us-east-1.amazonaws.com/mylists", {
                     credentials: "include"
                 })
                 const json = await response.json()
@@ -61,25 +35,10 @@ export default function Dashboard({ }) {
           let res 
     
           try {
-            res = await fetch(apiEndpoint, {
-                credentials: "include",
-                headers: {
-                    Accept: "application/json",
-                    "Content-Type": "application/json",
-                    "Access-Control-Allow-Credentials": true
-                  }                
-            })
+            res = await axios(apiEndpoint, { withCredentials: true })
             console.log('response: ', res)
-            const json = await res.json()
-            console.log('json: ', json)
-    
-            if (res.status === 200) {
-              const jsonResponse = await res.json()
-              console.log('jsonResponse: ', jsonResponse)
-            } else {
-              throw new Error("failed to authenticate user")
-            }
           } catch (error) {
+              console.log('error: ', error)
             setAuthenticated(false)
             setUser(null)
             setError("failed to authenticate user")

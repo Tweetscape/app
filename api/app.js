@@ -27,6 +27,8 @@ app.use(
 
 app.use(cookieParser())
 
+
+app.use(session({ secret: 'anything' }))
 // initialize passport
 app.use(passport.initialize())
 // deserialize cookie from the browser
