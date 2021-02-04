@@ -47,7 +47,7 @@ const getUserByTwitterId = async (userId) => {
     console.log('getting user by twitter_id!: ', params)
 
     const result = await dynamodb.get(params).promise()    
-    console.log('result getting user by twitter_id: ', result)
+    console.log('result getting user by twitter: ', result)
     return result.Item 
   } catch (error) {
     console.log(error)
