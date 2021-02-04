@@ -4,7 +4,7 @@ const users = require('../controllers/users')
 
 passport.serializeUser(function(user, done) {
     console.log('serialize user: ', user)
-    done(null, user.id);
+    done(null, user.twitter_id);
   });
   
   passport.deserializeUser(async function(id, done) {
