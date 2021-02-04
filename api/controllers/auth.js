@@ -1,4 +1,4 @@
-const CLIENT_HOME_PAGE_URL = "/"
+const CLIENT_HOME_PAGE_URL = "http://localhost:3000/dashboard";
 
 const authenticate = async (req, res, next) => {
     try {

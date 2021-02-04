@@ -3,6 +3,8 @@ const passport = require('passport')
 const authRoutes = express.Router()
 const { auth } = require('../controllers')
 
+const CLIENT_HOME_PAGE_URL = "http://localhost:3000/dashboard";
+
 const asyncHandler = fn => (req, res, next) => {
     return Promise
       .resolve(fn(req, res, next))
