@@ -15,10 +15,8 @@ const findOrCreate = async ({ id, username, displayName }) => {
     }
 
     console.log('typeof id: ', typeof id)
-
-    console.log('calling find or create function')
     const result = await users.findOrCreate({ id, username, displayName })
-    console.log(JSON.stringify(result))
+    console.log('findOrCreate result: ', JSON.stringify(result))
   } catch (error) {
     console.log("error finding or creating user: (user)", error)
   }

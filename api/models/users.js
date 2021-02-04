@@ -7,15 +7,12 @@ const dynamodb = new AWS.DynamoDB.DocumentClient({
 
 const findOrCreate = async ({ id, username, displayName }) => {
   try {
-    console.log('find or create user of id: ', id)
     const existingUser = await getUserByTwitterId(id)
   
     if (existingUser) {
       console.log('existing user: ', existingUser)
       return existingUser
     }
-  
-    console.log('creating user with twitter_id: ', id)
   
     const params = {
       TableName: "users-table-dev-twitter-users",
@@ -28,7 +25,8 @@ const findOrCreate = async ({ id, username, displayName }) => {
         updatedAt: Date.now()
       }
     }
-  
+
+    console.log('creating user with twitter_id: ', id)  
     return await dynamodb.put(params).promise()     
   } catch (error) {
     console.log('error with findOrCreate: ', error)
@@ -40,8 +38,6 @@ const getUserByTwitterId = async (userId) => {
     if (!userId) {
       throw new Error('error no userid provided')
     }
-  
-    console.log('typeof: ', typeof userId)
 
     const params = {
       TableName: "users-table-dev-twitter-users",
@@ -51,8 +47,8 @@ const getUserByTwitterId = async (userId) => {
     console.log('getting user by twitter_id!: ', params)
 
     const result = await dynamodb.get(params).promise()    
-    console.log('result: ', result)
-    return result 
+    console.log('result getting user by twitter_id: ', result)
+    return result.Item 
   } catch (error) {
     console.log(error)
   }

@@ -32,7 +32,7 @@ passport.serializeUser(function(user, done) {
       try {
         const userResult = await users.findOrCreate({ id, username, displayName })
         console.log('findOrCreateUser: ', userResult)
-        done(null, profile)
+        done(null, userResult)
       } catch (error) {
         console.log('error fetching user stuff: ', error)
       }
