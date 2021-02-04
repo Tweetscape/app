@@ -1,3 +1,5 @@
+const CLIENT_HOME_PAGE_URL = "/"
+
 const authenticate = async (req, res, next) => {
     try {
         res.status(200).send()
@@ -15,14 +17,6 @@ const loginSuccess = async (req, res, next) => {
             cookies: req.cookies
         })
     }
-    
-    // const url = "https://djdd1ix41h8xd.cloudfront.net/dashboard"
-    // const url = "http://localhost:3000/dashboard"
-    // try {
-    //     res.status(301).redirect(url)
-    // } catch (error) {
-    //     console.log('error logging in!: ', error)
-    // }
 }
 
 const loginFailure = async (req, res, next) => {
@@ -30,15 +24,11 @@ const loginFailure = async (req, res, next) => {
         success: false,
         message: "user failed to authenticate"
     })
-    // try {
-    //     res.status(200).send()
-    // } catch (error) {
-    //     console.log('error handling auth failure!: ', error)
-    // }
 }
 
 const logout = async (req, res, next) => {
     try {
+        req.logout()
         res.status(200).send()
     } catch (error) {
         console.log('error logging out!: ', error)
@@ -46,13 +36,16 @@ const logout = async (req, res, next) => {
 }
 
 const redirect = async (req, res, next) => {
+    console.log('redirect handler in auth.js called')
     try {
-        res.status(200).send()
+        passport.authenticate("twitter", {
+            successRedirect: CLIENT_HOME_PAGE_URL,
+            failureRedirect: "/auth/login/failed"
+        })
     } catch (error) {
         console.log('error redirecting!: ', error)
     }
 }
-
 
 module.exports = {
     authenticate,

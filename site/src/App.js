@@ -26,7 +26,7 @@ export default function App ({ }) {
       let res 
 
       try {
-        res = fetch(apiEndpoint, {
+        res = await fetch(apiEndpoint, {
           method: "GET",
           credentials: "include",
           headers: {
@@ -36,8 +36,10 @@ export default function App ({ }) {
           }
         })
 
+        console.log('response: ', res)
+
         if (res.status === 200) {
-          const jsonResponse = res.json()
+          const jsonResponse = await res.json()
           console.log('jsonResponse: ', jsonResponse)
         } else {
           throw new Error("failed to authenticate user")
