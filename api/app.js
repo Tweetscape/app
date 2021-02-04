@@ -1,6 +1,7 @@
 const cookieSession = require("cookie-session")
 const express = require('express')
 const session = require('express-session')
+const cors = require('cors')
 const app = express()
 const passport = require('passport')
   , TwitterStrategy = require('passport-twitter').Strategy
@@ -25,6 +26,14 @@ app.use(
   })
 );
 
+app.use(
+  cors({
+    origin: "http://localhost:3000", // allow to server to accept request from different origin
+    methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
+    credentials: true // allow session cookie from browser to pass through
+  })
+);
+
 app.use(session({ 
   saveUninitialized: true,
   secret: 'melody hensley is my spirit animal' 
@@ -43,16 +52,11 @@ passport.deserializeUser(async function(id, done) {
 
   try {
     user = await users.getUserByTwitterId(id)
-    console.log('user: ', user)
+    done(null, user)
   } catch (error) {
-    err = error 
-    console.log('error deserializing user: ', error)
+    console.log('error deserializing the user: ', error)
+    done(new Error("Failed to deserialize an user"))
   }
-  
-  done(err, { twitter_id: id })
-  // users.findById(id, function(err, user) {
-  //   done(err, user);
-  // });
 });
 
 passport.use(new TwitterStrategy({

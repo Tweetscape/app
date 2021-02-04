@@ -3,7 +3,8 @@ import React, {createContext, useReducer} from 'react'
 const initialState = { 
     isLoading: true,
     isError: false,
-    data: { }
+    user: null,
+    data: {},
 }
 
 const store = createContext(initialState);
@@ -19,6 +20,12 @@ const StateProvider = ( { children } ) => {
                 ...state.data,
                 // something
             }
+        }
+      }
+      case 'setUser': {
+        return {
+          ...state,
+          user: action.payload
         }
       }
       default:
