@@ -6,6 +6,7 @@ const { auth } = require('../controllers')
 const CLIENT_HOME_PAGE_URL = "http://localhost:3000/dashboard";
 
 const asyncHandler = fn => (req, res, next) => {
+  console.log('req obj: ', req)
     return Promise
       .resolve(fn(req, res, next))
       .catch(next);
@@ -16,7 +17,7 @@ authRoutes.get('/login/failed', asyncHandler(auth.loginFailure))
 authRoutes.get('/twitter', passport.authenticate('twitter'))
 authRoutes.get('/twitter/redirect', asyncHandler(auth.redirect))
 
-authRoutes.get('/auth/twitter/callback', 
+authRoutes.get('/twitter/callback', 
   passport.authenticate('twitter', {
       successRedirect: CLIENT_HOME_PAGE_URL, //'/auth/login/success',
       failureRedirect: '/auth/login/failed'
