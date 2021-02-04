@@ -3,8 +3,9 @@ const TwitterStrategy = require("passport-twitter");
 const users = require('../controllers/users')
 
 passport.serializeUser(function(user, done) {
-    console.log('serialize user: ', user)
-    done(null, user.twitter_id);
+    const id = user.twitter_id 
+    console.log('serialize user id: ', id)
+    done(null, id);
   });
   
   passport.deserializeUser(async function(id, done) {
