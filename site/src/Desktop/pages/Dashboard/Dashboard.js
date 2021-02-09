@@ -7,12 +7,6 @@ import TwitterCard from 'Desktop/components/TwitterCard/TwitterCard'
 
 const apiEndpoint = "https://h27pptsq0k.execute-api.us-east-1.amazonaws.com/auth/login/success"
 
-const getListDataEndpoint = (listId) => {
-    return 'https://h27pptsq0k.execute-api.us-east-1.amazonaws.com/list/884466365532209153'
-    // return `https://h27pptsq0k.execute-api.us-east-1.amazonaws.com/list/${listId}`
-// } //'https://h27pptsq0k.execute-api.us-east-1.amazonaws.com/list/884466365532209153' 
-}
-
 export default function Dashboard({ }) {
     const [tab, setTab] = useState(0)
     const [myLists, setMyLists] = useState([])
@@ -65,7 +59,10 @@ export default function Dashboard({ }) {
     useEffect(() => {
         async function getListData() {
             try {
-                const res = await axios(getListDataEndpoint(featuredLists[currentListIdx]), { withCredentials: true })
+                const url = getListDataEndpoint(featuredLists[currentListIdx])
+                console.log('url: ', url)
+
+                const res = await axios(url, { withCredentials: true })
                 if (res && res.data) {
                     const tweets = JSON.parse(JSON.stringify(res.data.listData))
 
@@ -98,8 +95,13 @@ export default function Dashboard({ }) {
 
         setTwitterPosts(tweets)
     }, [sorting])      
-      
+    
+    const getListDataEndpoint = (id) => {
+        return `https://h27pptsq0k.execute-api.us-east-1.amazonaws.com/list/${id}`
+    }    
+
     const handleSetTab = (index) => () => setTab(index)
+    
 
     const myListsStyle = tab === 0 ? { backgroundColor: "#e2e2e2aa", borderBottom: "2px solid black" } : null 
     const featuredListsStyle = tab === 1 ? { backgroundColor: "#e2e2e2aa", borderBottom: "2px solid black" } : null 
