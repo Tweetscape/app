@@ -122,8 +122,7 @@ export default function Dashboard({ }) {
         if (twitterPosts && twitterPosts.length) {
             console.log(twitterPosts)
             return twitterPosts.map(post => {
-                console.log('post: ', post)
-                return <TwitterTweetEmbed tweetId={post.id_str} />
+                return <TwitterTweetEmbed tweetId={post.id_str} key={post.id_str} />
             })
         }
 
