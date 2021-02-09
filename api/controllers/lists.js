@@ -12,6 +12,10 @@ const getFeaturedLists = async (req, res, next) => {
 
 const getMyLists = async (req, res, next) => {
     try {
+        
+        const userId = req.session.passport.user
+        console.log('the user id is: ', userId)
+
         console.log('request - user: ', req.user)
         if (!req.user) {
             res.json({})
@@ -23,8 +27,7 @@ const getMyLists = async (req, res, next) => {
         if (!req.session || !req.session.passport) {
             res.json({})
         }
-
-        const userId = req.session.passport.user
+        
         console.log('user id from user: ', userId)
         const myLists = await lists.getMyLists(userId)
         res.json({ myLists })

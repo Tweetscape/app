@@ -7,6 +7,10 @@ import styles from './style.module.css'
 const twitterLoginUrl = "https://h27pptsq0k.execute-api.us-east-1.amazonaws.com/auth/twitter"
 
 export default function Navbar({ }) {
+    const handleOnClick = () => {
+        window.open(twitterLoginUrl, "_self")
+    }
+    
     return (
         <div className={styles.container}>
             <div className={styles.wrapper}>
@@ -19,7 +23,7 @@ export default function Navbar({ }) {
                     </Link>
                     <Switch>
                         <Route path="/dashboard">
-                            <a href={twitterLoginUrl}><div style={{ fontWeight: "bold" }}>Sign In</div></a>
+                            <div onClick={handleOnClick} style={{ fontWeight: "bold" }}>Sign In</div>
                         </Route>
                         <Route path="*">
                             <Link to="/dashboard">

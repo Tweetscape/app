@@ -21,7 +21,9 @@ authRoutes.get('/twitter/callback',
   passport.authenticate('twitter', {
       successRedirect: CLIENT_HOME_PAGE_URL, //'/auth/login/success',
       failureRedirect: '/auth/login/failed'
-  }))
+  }), (req, res) => {
+    res.redirect('/')
+  })
 
 // authRoutes.get('/twitter/callback', function(req, res, next) {
 //     console.log('request to - /twitter/callback')

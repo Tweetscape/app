@@ -1,6 +1,7 @@
 const cookieSession = require("cookie-session")
 const express = require('express')
 const session = require('express-session')
+const bodyparser = require('body-parser')
 const cors = require('cors')
 const app = express()
 const cookieParser = require("cookie-parser");
@@ -19,23 +20,17 @@ const CLIENT_HOME_PAGE_URL = "http://localhost:3000/dashboard";
 
 app.use(
   cookieSession({
-    name: "session",
-    keys: [COOKIE_KEY],
+    name: "twitter-auth-session",
+    keys: ['key1', 'key2'],
     maxAge: 24 * 60 * 60 * 100
   })
 );
 
 app.use(cookieParser())
+app.use(bodyparser())
 
 
-app.use(session({ 
-  secret: 'keyboard cat',
-  resave: false,
-  saveUninitialized: true,  
-}))
-// initialize passport
 app.use(passport.initialize())
-// deserialize cookie from the browser
 app.use(passport.session())
 
 app.use(
@@ -46,17 +41,6 @@ app.use(
   })
 );
 
-// Enable CORS
-// app.use(function (req, res, next) {
-//   res.header('Access-Control-Allow-Origin', '*')
-//   res.header('Access-Control-Allow-Methods', '*')
-//   res.header('Access-Control-Allow-Headers', '*')
-//   res.header('x-powered-by', 'serverless-express')
-//   console.log('request object: ', req)
-//   next()
-// })
-
-// Enable JSON use
 app.use(express.json())
 
 const asyncHandler = fn => (req, res, next) => {
@@ -70,6 +54,7 @@ app.options(`*`, (req, res) => {
 })
 
 app.use('/auth', authRoutes)
+
 const authCheck = (req, res, next) => {
   if (!req.user) {
     res.status(401).json({
@@ -90,7 +75,7 @@ app.get("/", authCheck, (req, res) => {
   });
 });
 
-app.get(`/list/:list_id/:count`, asyncHandler(lists.getListData))
+app.get(`/list/:list_id/`, asyncHandler(lists.getListData))
 app.get(`/featuredLists`, asyncHandler(lists.getFeaturedLists))
 app.get(`/mylists`, asyncHandler(lists.getMyLists))
 
