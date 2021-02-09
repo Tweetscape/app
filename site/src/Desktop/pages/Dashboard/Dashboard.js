@@ -4,6 +4,7 @@ import axios from 'axios'
 import styles from './style.module.css'
 import { store } from 'utils/store'
 import TwitterCard from 'Desktop/components/TwitterCard/TwitterCard'
+import { TwitterTimelineEmbed, TwitterShareButton, TwitterFollowButton, TwitterHashtagButton, TwitterMentionButton, TwitterTweetEmbed, TwitterMomentShare, TwitterDMButton, TwitterVideoEmbed, TwitterOnAirButton } from 'react-twitter-embed';
 
 const apiEndpoint = "https://h27pptsq0k.execute-api.us-east-1.amazonaws.com/auth/login/success"
 
@@ -120,7 +121,10 @@ export default function Dashboard({ }) {
     const renderTweets = () => {
         if (twitterPosts && twitterPosts.length) {
             console.log(twitterPosts)
-            return twitterPosts.map(post => <TwitterCard data={post} />)
+            return twitterPosts.map(post => {
+                console.log('post: ', post)
+                return <TwitterTweetEmbed tweetId={post.id_str} />
+            })
         }
 
         return null 
