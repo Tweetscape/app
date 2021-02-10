@@ -4,7 +4,7 @@ import axios from 'axios'
 import styles from './style.module.css'
 import { store } from 'utils/store'
 import TwitterCard from 'Desktop/components/TwitterCard/TwitterCard'
-import { TwitterTimelineEmbed, TwitterShareButton, TwitterFollowButton, TwitterHashtagButton, TwitterMentionButton, TwitterTweetEmbed, TwitterMomentShare, TwitterDMButton, TwitterVideoEmbed, TwitterOnAirButton } from 'react-twitter-embed';
+import { TwitterTimelineEmbed, TwitterTweetEmbed } from 'react-twitter-embed';
 
 const apiEndpoint = "https://h27pptsq0k.execute-api.us-east-1.amazonaws.com/auth/login/success"
 
@@ -36,7 +36,7 @@ export default function Dashboard({ }) {
             }    
         }
 
-        // getIt()
+        getIt()
     }, [])
 
     useEffect(() => {
@@ -76,7 +76,7 @@ export default function Dashboard({ }) {
             } 
         }
 
-        // getListData()
+        getListData()
       }, [currentListIdx])
 
       useEffect(() => {
@@ -119,20 +119,18 @@ export default function Dashboard({ }) {
     }
 
     const renderTweets = () => {
-        console.log('tweetsloading: ', tweetsLoading)
-
         if (tweetsLoading) {
             return <div style={{ color: 'black' }}>Tweets are loading</div>
         }
 
-        return <TwitterTimelineEmbed sourceType="list" id={featuredLists[currentListIdx]} />
+        // return <TwitterTimelineEmbed sourceType="list" id={featuredLists[currentListIdx]} key={featuredLists[currentListIdx]} />
 
-        // if (twitterPosts && twitterPosts.length) {
-        //     console.log(twitterPosts)
-        //     return twitterPosts.map(post => {
-        //         return <TwitterTweetEmbed tweetId={post.id_str} key={post.id_str} />
-        //     })
-        // }
+        if (twitterPosts && twitterPosts.length) {
+            console.log(twitterPosts)
+            return twitterPosts.map(post => {
+                return <TwitterTweetEmbed tweetId={post.id_str} key={post.id_str} />
+            })
+        }
 
         // return null 
     }

@@ -1,6 +1,7 @@
 const axios = require('axios')
 
 const getListUrl = "https://api.twitter.com/1.1/lists/statuses.json"
+const getListDataUrl = "https://api.twitter.com/1.1/lists/show.json"
 const getMyListsUrl = "https://api.twitter.com/1.1/lists/list.json"
 
 const bearerToken = "Bearer AAAAAAAAAAAAAAAAAAAAABApLwEAAAAA4VuQKyVlv2n2wi3eyXikFL5EJgk%3DeVRE278bNEVux38KAOzk4JmaVGVK3SsvDRfpnwdfliBbsaQMOB"
@@ -39,7 +40,7 @@ const getMyLists = async (userId) => {
     }
 }
 
-const getListData = async (list_id, count) => {
+const getListTweets = async (list_id, count) => {
     try {
         const response = await axios.get(getListUrl, {
             params: {
@@ -59,7 +60,28 @@ const getListData = async (list_id, count) => {
     }
 }
 
+const getListData = async (list_id, count) => {
+    try {
+        const response = await axios.get(getListDataUrl, {
+            params: {
+                list_id,
+                count
+            }, headers
+        })
+        
+        if (response.data) {
+            return response.data
+        }
+
+        throw 'Invalid response'
+    } catch (error) {
+        console.log('error fetching list data: ', error)
+        return error
+    }
+}
+
 module.exports = {
     getListData,
-    getMyLists
+    getMyLists,
+    getListTweets
 }

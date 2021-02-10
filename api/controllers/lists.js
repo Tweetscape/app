@@ -37,7 +37,6 @@ const getMyLists = async (req, res, next) => {
 }
 
 const getListData = async (req, res, next) => {
-
     const list_id = req.params.list_id
     let count = req.params.count
 
