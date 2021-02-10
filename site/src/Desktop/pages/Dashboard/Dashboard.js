@@ -66,7 +66,7 @@ export default function Dashboard({ }) {
                 const res = await axios(url, { withCredentials: true })
 
                 if (res && res.data) {
-                    const tweets = JSON.parse(JSON.stringify(res.data.listData))
+                    const tweets = JSON.parse(JSON.stringify(res.data.tweets))
                     console.log('setting tweets: ', tweets)
 
                     setTwitterPosts(tweets)

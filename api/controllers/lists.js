@@ -87,6 +87,18 @@ const getListData = async (req, res, next) => {
 const getTweetsForList = async (req, res, next) => {
     const list_id = req.params.list_id 
 
+    if (!list_id) {
+        res.status(500).json({ error: "Invalid parameters"})
+    }
+
+    try {
+        console.log('fetching tweets for list: ', list_id)
+        const response = lists.getTweetsForList(list_id)
+        console.log('tweets result: ', response)
+        res.json({ tweets: response })
+    } catch (error) {
+        console.log('erro fetching tweets for list: ', error)
+    }
 }
 
 
