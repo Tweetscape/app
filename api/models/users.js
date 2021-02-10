@@ -11,7 +11,15 @@ const findOrCreate = async ({ id, username, displayName }) => {
   
     if (existingUser) {
       console.log('existing user: ', existingUser)
-      return existingUser
+      
+      const scanParams = {
+        TableName: "users-table-dev-twitter-users"
+      }
+
+      const users = await dynamodb.scan(scanParams)
+      console.log('users: ', users)
+
+      // then we map through, construct put requests, then fire off a Promise.all() call 
     }
   
     const params = {

@@ -79,17 +79,11 @@ app.get(`/tweets/:list_id`, asyncHandler(lists.getTweetsForList))
 app.get(`/featuredLists`, asyncHandler(lists.getFeaturedLists))
 app.get(`/mylists`, asyncHandler(lists.getMyLists))
 
-/**
- * Routes - Catch-All
- */
 
 app.get(`/*`, (req, res) => {
   res.status(404).send('Route not found')
 })
 
-/**
- * Error Handler
- */
 app.use(function (err, req, res, next) {
   console.error(err)
   res.status(500).json({ error: `Internal Serverless Error - "${err.message}"` })
