@@ -40,7 +40,7 @@ const getMyLists = async (userId) => {
     }
 }
 
-const getListTweets = async (list_id, count) => {
+const getTweetsForList = async (list_id, count) => {
     try {
         const response = await axios.get(getListUrl, {
             params: {
@@ -83,5 +83,6 @@ const getListData = async (list_id, count) => {
 module.exports = {
     getListData,
     getMyLists,
-    getListTweets
+    getTweetsForList,
+    getFeaturedLists
 }

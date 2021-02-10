@@ -61,9 +61,38 @@ const getListData = async (req, res, next) => {
     }
 }
 
+const getListData = async (req, res, next) => {
+    const list_id = req.params.list_id
+    // let count = req.params.count
+
+    if (!list_id) {
+        res.status(500).json({ error: "Invalid parameters"})
+    }
+
+    let count = 150
+
+    console.log('list_id: ', list_id)
+    console.log('count: ', count)
+    
+    try {
+        const listData = await lists.getListData(list_id, count)
+        console.log('listData: ', listData)
+        res.json({ listData })
+    } catch (error) {
+        console.log('error getting list data: ', error)
+        res.status(500).json({ error: "Internal server error"})
+    }
+}
+
+const getTweetsForList = async (req, res, next) => {
+    const list_id = req.params.list_id 
+
+}
+
 
 module.exports = {
     getFeaturedLists,
     getMyLists,
-    getListData
+    getListData,
+    getTweetsForList
 }

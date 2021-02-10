@@ -27,10 +27,11 @@ export default function Dashboard({ }) {
                 const response = await axios("https://h27pptsq0k.execute-api.us-east-1.amazonaws.com/mylists", {
                     credentials: "include"
                 })
-                const json = await response.json()
+                // const json = await response.json()
     
-                console.log('response for myLists: ', json)
-                setMyLists(json)
+                console.log('response for myLists: ', response)
+                
+                // setMyLists(json)
             } catch (error) {
                 console.log('error fetching my lists!: ', error)
             }    
@@ -47,7 +48,7 @@ export default function Dashboard({ }) {
             res = await axios(apiEndpoint, { withCredentials: true })
             console.log('response: ', res)
           } catch (error) {
-              console.log('error: ', error)
+            console.log('error: ', error)
             setAuthenticated(false)
             setUser(null)
             setError("failed to authenticate user")
@@ -60,14 +61,14 @@ export default function Dashboard({ }) {
     useEffect(() => {
         async function getListData() {
             try {
-                console.log('get list data')
-
                 dispatch({ type: "tweetLoadingToggle" })
-                const url = getListDataEndpoint(featuredLists[currentListIdx])
+                const url = getListTweetsEndpoint(featuredLists[currentListIdx])
                 const res = await axios(url, { withCredentials: true })
 
                 if (res && res.data) {
                     const tweets = JSON.parse(JSON.stringify(res.data.listData))
+                    console.log('setting tweets: ', tweets)
+
                     setTwitterPosts(tweets)
                     dispatch({ type: "tweetLoadingToggle" })
                 }
@@ -81,6 +82,7 @@ export default function Dashboard({ }) {
 
       useEffect(() => {
         const tweets = JSON.parse(JSON.stringify(twitterPosts)) 
+        console.log('tweets: ', tweets)
         
         if (sorting === "Most Popular") {
             tweets.sort((a, b) => {
@@ -99,7 +101,11 @@ export default function Dashboard({ }) {
     
     const getListDataEndpoint = (id) => {
         return `https://h27pptsq0k.execute-api.us-east-1.amazonaws.com/list/${id}`
-    }    
+    }  
+    
+    const getListTweetsEndpoint = (id) => {
+        return `https://h27pptsq0k.execute-api.us-east-1.amazonaws.com/tweets/${id}`
+    }
 
     const handleSetTab = (index) => () => setTab(index)
     
@@ -126,7 +132,7 @@ export default function Dashboard({ }) {
         // return <TwitterTimelineEmbed sourceType="list" id={featuredLists[currentListIdx]} key={featuredLists[currentListIdx]} />
 
         if (twitterPosts && twitterPosts.length) {
-            console.log(twitterPosts)
+            console.log('twitter posts: ', twitterPosts)
             return twitterPosts.map(post => {
                 return <TwitterTweetEmbed tweetId={post.id_str} key={post.id_str} />
             })
