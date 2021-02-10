@@ -18,7 +18,7 @@ export default function Dashboard({ }) {
     const [currentListIdx, setCurrentListIdx] = useState(0)
     const [sorting, setSorting] = useState("Standard")
 
-    const { dispatch, state: { data }} = useContext(store)
+    const { dispatch, state: { data, tweetsLoading }} = useContext(store)
     const featuredLists = data.featuredLists
 
     useEffect(() => {
@@ -60,23 +60,23 @@ export default function Dashboard({ }) {
     useEffect(() => {
         async function getListData() {
             try {
-                const url = getListDataEndpoint(featuredLists[currentListIdx])
-                console.log('url: ', url)
+                console.log('get list data')
 
+                dispatch({ type: "tweetLoadingToggle" })
+                const url = getListDataEndpoint(featuredLists[currentListIdx])
                 const res = await axios(url, { withCredentials: true })
+
                 if (res && res.data) {
                     const tweets = JSON.parse(JSON.stringify(res.data.listData))
-
-                    console.log('current sorting: ', sorting)
-
                     setTwitterPosts(tweets)
+                    dispatch({ type: "tweetLoadingToggle" })
                 }
             } catch (error) {
                 console.log('error fetching list data: ', error)
             } 
         }
 
-        getListData()
+        // getListData()
       }, [currentListIdx])
 
       useEffect(() => {
@@ -119,14 +119,22 @@ export default function Dashboard({ }) {
     }
 
     const renderTweets = () => {
-        if (twitterPosts && twitterPosts.length) {
-            console.log(twitterPosts)
-            return twitterPosts.map(post => {
-                return <TwitterTweetEmbed tweetId={post.id_str} key={post.id_str} />
-            })
+        console.log('tweetsloading: ', tweetsLoading)
+
+        if (tweetsLoading) {
+            return <div style={{ color: 'black' }}>Tweets are loading</div>
         }
 
-        return null 
+        return <TwitterTimelineEmbed sourceType="list" id={featuredLists[currentListIdx]} />
+
+        // if (twitterPosts && twitterPosts.length) {
+        //     console.log(twitterPosts)
+        //     return twitterPosts.map(post => {
+        //         return <TwitterTweetEmbed tweetId={post.id_str} key={post.id_str} />
+        //     })
+        // }
+
+        // return null 
     }
 
     return ( 

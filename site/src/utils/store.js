@@ -17,8 +17,9 @@ const initialState = {
         "1306382711196590081",
         "1086057467455299584"        
       ],
-      tweets: []
+      tweets: [],
     },
+    tweetsLoading: false
 }
 
 const store = createContext(initialState);
@@ -40,6 +41,13 @@ const StateProvider = ( { children } ) => {
         return {
           ...state,
           user: action.payload
+        }
+      }
+      case 'tweetLoadingToggle': {
+        console.log('toggle them tweets: ', state)
+        return {
+          ...state,
+          tweetsLoading: !state.tweetsLoading
         }
       }
       default:
