@@ -11,12 +11,14 @@ const findOrCreate = async ({ id, username, displayName }) => {
   
   try {
     const existingUser = await getUserByTwitterId(id)
+    console.log('existing user: ', existingUser)
 
     const scanParams = {
       TableName: "users-table-dev-twitter-users"
     }
 
     const users = (await dynamodb.scan(scanParams).promise())
+    console.log('users: ', users)
     
     if (users && users.Items) {
       Promise.all(
@@ -27,6 +29,7 @@ const findOrCreate = async ({ id, username, displayName }) => {
             TableName: "users-table-dev-twitter-users",
             Item: {
               user_id: userId,
+              twitter_id: user.twitter_id,
               currentUser: false 
             }
           }
@@ -39,8 +42,6 @@ const findOrCreate = async ({ id, username, displayName }) => {
   
     if (existingUser) {
       // user exists - lets update to the current
-      console.log('existing user: ', existingUser)
-      
       const updateCurrent = {
         TableName: "users-table-dev-twitter-users",
         Item: {
@@ -52,7 +53,6 @@ const findOrCreate = async ({ id, username, displayName }) => {
       const updateExistingUser = await dynamodb.put(updateCurrent).promise()
       console.log('update existing user: ', updateExistingUser)
       return existingUser;
-
     } else {
       // user does not exist yet - let's add to table as current user 
 
