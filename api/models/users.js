@@ -8,6 +8,8 @@ const dynamodb = new AWS.DynamoDB.DocumentClient({
 const findOrCreate = async ({ id, username, displayName }) => {
   // step 1: set all the users as not current user
   // step 2: set current user as "currentUser = true"
+
+  console.log('does find or create even run?')
   
   try {
     const existingUser = await getUserByTwitterId(id)
@@ -28,12 +30,12 @@ const findOrCreate = async ({ id, username, displayName }) => {
           const updateParam = {
             TableName: "users-table-dev-twitter-users",
             Item: {
-              user_id: userId,
-              twitter_id: user.twitter_id,
-              currentUser: false 
+              ...user,
+              currentUser: user.twitter_id === id 
             }
           }
 
+          console.log('update param: ', updateParam)
           let result = await dynamodb.put(updateParam).promise()
           console.log('update result: ', result)
         })
@@ -41,20 +43,21 @@ const findOrCreate = async ({ id, username, displayName }) => {
     }
   
     if (existingUser) {
-      // user exists - lets update to the current
+
       const updateCurrent = {
         TableName: "users-table-dev-twitter-users",
         Item: {
-          twitter_id: id,
+          ...existingUser,
           currentUser: true
         }
       }
-
+      console.log('update current params: ', updateCurrent)
       const updateExistingUser = await dynamodb.put(updateCurrent).promise()
       console.log('update existing user: ', updateExistingUser)
       return existingUser;
+
     } else {
-      // user does not exist yet - let's add to table as current user 
+      // User does not exist 
 
       const params = {
         TableName: "users-table-dev-twitter-users",
@@ -70,6 +73,7 @@ const findOrCreate = async ({ id, username, displayName }) => {
       }
   
       console.log('creating user with twitter_id: ', id)  
+      console.log('creating user params: ', params)
       const newUser = await dynamodb.put(params).promise()     
       console.log('new user created: ', newUser)
     }
@@ -93,6 +97,21 @@ const getUserByTwitterId = async (userId) => {
 
     const result = await dynamodb.get(params).promise()    
     console.log('result getting user by twitter: ', result)
+
+    if (result.Item) {
+      console.log('result: ', result.Item)
+      const updateParams = {
+        TableName: "users-table-dev-twitter-users",
+        Item: {
+          ...result.Item,
+          currentUser: true
+        }
+      }
+
+      console.log('update params getUserBTid: ', updateParams)
+      const updatedItem = await dynamodb.put(updateParams).promise()         
+      return result.Item 
+    }
     return result.Item 
   } catch (error) {
     console.log(error)

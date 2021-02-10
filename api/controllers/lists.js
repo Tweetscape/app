@@ -93,7 +93,7 @@ const getTweetsForList = async (req, res, next) => {
 
     try {
         console.log('fetching tweets for list: ', list_id)
-        const response = lists.getTweetsForList(list_id)
+        const response = await lists.getTweetsForList(list_id)
         console.log('tweets result: ', response)
         res.json({ tweets: response })
     } catch (error) {
