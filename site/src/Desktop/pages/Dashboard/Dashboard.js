@@ -29,6 +29,8 @@ export default function Dashboard({ }) {
                 const response = await axios("https://h27pptsq0k.execute-api.us-east-1.amazonaws.com/mylists", {
                     credentials: "include"
                 })
+                console.log('setting my lists: ', response.data.myLists)
+
                 setMyLists(response.data.myLists)
             } catch (error) {
                 console.log('error fetching my lists!: ', error)
@@ -91,11 +93,12 @@ export default function Dashboard({ }) {
                 dispatch({ type: "tweetLoadingToggle" })
             } catch (error) {
                 console.log('error fetching list data: ', error)
+                dispatch({ type: "tweetLoadingToggle" })
             } 
         }
 
         getListData()
-      }, [currentListIdx, tab])
+      }, [currentListIdx, tab, myLists])
 
       useEffect(() => {
         const tweets = JSON.parse(JSON.stringify(twitterPosts)) 
@@ -165,17 +168,12 @@ export default function Dashboard({ }) {
             return <div style={{ color: 'black' }}>Tweets are loading</div>
         }
 
-        // return <TwitterTimelineEmbed sourceType="list" id={featuredLists[currentListIdx]} key={featuredLists[currentListIdx]} />
-
         if (twitterPosts && twitterPosts.length) {
             console.log('twitter posts: ', twitterPosts)
             return twitterPosts.map(post => {
                 return <TwitterCard data={post} />
-                // return <TwitterTweetEmbed tweetId={post.id_str} key={post.id_str} />
             })
         }
-
-        // return null 
     }
 
     return ( 
