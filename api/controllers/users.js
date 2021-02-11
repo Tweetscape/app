@@ -23,9 +23,19 @@ const findOrCreate = async ({ id, username, displayName }) => {
   }
 }
 
+const getCurrentUser = async () => {
+  try {
+    const result = await users.getCurrentUser()
+    return result
+  } catch (error) {
+    console.log('error getting current user: ', error)
+  }
+}
+
 module.exports = {
   getUserByTwitterId,
-  findOrCreate
+  findOrCreate,
+  getCurrentUser
 }
 
 // /**

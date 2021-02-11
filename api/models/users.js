@@ -118,7 +118,26 @@ const getUserByTwitterId = async (userId) => {
   }
 }
 
+const getCurrentUser = async () => {
+  try {
+      const params = {
+        TableName: "users-table-dev-twitter-users",
+        ExpressionAttributeValues: { 
+          currentUser: true
+        }
+      }
+     const res = await dynamodb.query(params).promise()
+     console.log('current user: ', res)
+     if (res && res[0] && res[0].Item) {
+       return res[0].Item
+     }
+  } catch (error) {
+    console.log('error finding existing user!: ', error)
+  }
+}
+
 module.exports = {
   findOrCreate,
-  getUserByTwitterId
+  getUserByTwitterId,
+  getCurrentUser
 }

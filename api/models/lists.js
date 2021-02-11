@@ -22,12 +22,12 @@ const getFeaturedLists = async () => {
     }
 }
 
-const getMyLists = async (userId) => {
+const getMyLists = async (username) => {
     try {
-        console.log('getting my lists with userId: ' ,userId)
+        console.log('getting my lists with userId: ', username)
 
         const response = await axios.get(getMyListsUrl, {
-            user_id: userId
+            screen_name: username
         })
 
         if (response.data) {

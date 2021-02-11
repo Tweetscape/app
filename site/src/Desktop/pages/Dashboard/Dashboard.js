@@ -6,7 +6,18 @@ import { store } from 'utils/store'
 import TwitterCard from 'Desktop/components/TwitterCard/TwitterCard'
 import { TwitterTimelineEmbed, TwitterTweetEmbed } from 'react-twitter-embed';
 
+const endpoint = "https://h27pptsq0k.execute-api.us-east-1.amazonaws.com/"
 const apiEndpoint = "https://h27pptsq0k.execute-api.us-east-1.amazonaws.com/auth/login/success"
+
+const getCurrentUser = async () => {
+    try {
+        const res = await axios(endpoint + "currentuser/")
+        console.log('res: ', res)
+        return res 
+    } catch (error) {
+        console.log('error fetching user: ', error)
+    }
+}
 
 export default function Dashboard({ }) {
     const [tab, setTab] = useState(0)
@@ -109,7 +120,6 @@ export default function Dashboard({ }) {
 
     const handleSetTab = (index) => () => setTab(index)
     
-
     const myListsStyle = tab === 0 ? { backgroundColor: "#e2e2e2aa", borderBottom: "2px solid black" } : null 
     const featuredListsStyle = tab === 1 ? { backgroundColor: "#e2e2e2aa", borderBottom: "2px solid black" } : null 
 

@@ -79,7 +79,6 @@ app.get(`/tweets/:list_id`, asyncHandler(lists.getTweetsForList))
 app.get(`/featuredLists`, asyncHandler(lists.getFeaturedLists))
 app.get(`/mylists`, asyncHandler(lists.getMyLists))
 
-
 app.get(`/*`, (req, res) => {
   res.status(404).send('Route not found')
 })
