@@ -27,7 +27,9 @@ const getMyLists = async (username) => {
         console.log('getting my lists with userId: ', username)
 
         const response = await axios.get(getMyListsUrl, {
-            screen_name: username
+            params: {
+                screen_name: username
+            }, headers
         })
 
         if (response.data) {

@@ -18,7 +18,7 @@ const getMyLists = async (req, res, next) => {
         let username 
 
         if (currentUser && currentUser.twitter_id) {
-            username = currentUser.twitter_id
+            username = currentUser.username
         }
 
         const myLists = await lists.getMyLists(username)
