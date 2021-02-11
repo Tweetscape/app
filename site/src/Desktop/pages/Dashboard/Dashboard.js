@@ -9,15 +9,6 @@ import { TwitterTimelineEmbed, TwitterTweetEmbed } from 'react-twitter-embed';
 const endpoint = "https://h27pptsq0k.execute-api.us-east-1.amazonaws.com/"
 const apiEndpoint = "https://h27pptsq0k.execute-api.us-east-1.amazonaws.com/auth/login/success"
 
-const getCurrentUser = async () => {
-    try {
-        const res = await axios(endpoint + "currentuser/")
-        console.log('res: ', res)
-        return res 
-    } catch (error) {
-        console.log('error fetching user: ', error)
-    }
-}
 
 export default function Dashboard({ }) {
     const [tab, setTab] = useState(0)
@@ -38,11 +29,7 @@ export default function Dashboard({ }) {
                 const response = await axios("https://h27pptsq0k.execute-api.us-east-1.amazonaws.com/mylists", {
                     credentials: "include"
                 })
-                // const json = await response.json()
-    
-                console.log('response for myLists: ', response)
-                
-                // setMyLists(json)
+                setMyLists(response.data.myLists)
             } catch (error) {
                 console.log('error fetching my lists!: ', error)
             }    
@@ -73,23 +60,42 @@ export default function Dashboard({ }) {
         async function getListData() {
             try {
                 dispatch({ type: "tweetLoadingToggle" })
-                const url = getListTweetsEndpoint(featuredLists[currentListIdx])
-                const res = await axios(url, { withCredentials: true })
 
-                if (res && res.data) {
-                    const tweets = JSON.parse(JSON.stringify(res.data.tweets))
-                    console.log('setting tweets: ', tweets)
+                const listType = tab === 0 && myLists.length ? myLists[currentListIdx] : featuredLists[currentListIdx]
+                
+                if (tab === 1) {
+                    const url = getListTweetsEndpoint(featuredLists[currentListIdx])
+                    const res = await axios(url, { withCredentials: true })
+    
+                    if (res && res.data) {
+                        const tweets = JSON.parse(JSON.stringify(res.data.tweets))
+                        console.log('setting tweets: ', tweets)
+                        setTwitterPosts(tweets)
+                    }
+                } else {
+                    if (myLists.length) {
+                        const url = getListTweetsEndpoint(myLists[currentListIdx].id_str)
+                        const res = await axios(url, { withCredentials: true })
 
-                    setTwitterPosts(tweets)
-                    dispatch({ type: "tweetLoadingToggle" })
+                        if (res && res.data) {
+                            const tweets = JSON.parse(JSON.stringify(res.data.tweets))
+                            console.log('setting tweets: ', tweets)
+        
+                            setTwitterPosts(tweets)
+                        }                        
+                    } else {
+                        setTwitterPosts([])
+                    }
                 }
+
+                dispatch({ type: "tweetLoadingToggle" })
             } catch (error) {
                 console.log('error fetching list data: ', error)
             } 
         }
 
         getListData()
-      }, [currentListIdx])
+      }, [currentListIdx, tab])
 
       useEffect(() => {
         const tweets = JSON.parse(JSON.stringify(twitterPosts)) 
@@ -124,6 +130,26 @@ export default function Dashboard({ }) {
     const featuredListsStyle = tab === 1 ? { backgroundColor: "#e2e2e2aa", borderBottom: "2px solid black" } : null 
 
     const renderLists = () => {
+
+        if (tab === 0 && myLists.length) {
+            return myLists.map((item, idx) => {
+                const styleObj = currentListIdx === idx ? { color: "black" } : { color: "#838383" }
+                return (
+                    <div className={styles.listRow} style={styleObj} onClick={() => setCurrentListIdx(idx)}>
+                        {item.name}
+                    </div>
+                )
+            })
+        }
+
+        if (tab === 0 && !myLists.length) {
+            return (
+                <div className={styles.signInContainer}>
+                    Sign in to view your lists 
+                </div>
+            )
+        }
+
         return featuredLists.map((item, idx) => {
             const styleObj = currentListIdx === idx ? { color: "black" } : { color: "#838383" }
             return (
@@ -144,7 +170,8 @@ export default function Dashboard({ }) {
         if (twitterPosts && twitterPosts.length) {
             console.log('twitter posts: ', twitterPosts)
             return twitterPosts.map(post => {
-                return <TwitterTweetEmbed tweetId={post.id_str} key={post.id_str} />
+                return <TwitterCard data={post} />
+                // return <TwitterTweetEmbed tweetId={post.id_str} key={post.id_str} />
             })
         }
 
