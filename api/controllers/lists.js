@@ -79,6 +79,8 @@ const getListData = async (req, res, next) => {
 
 const getTweetsForList = async (req, res, next) => {
     const list_id = req.params.list_id 
+    const max_id = req.params.maxId
+    const count = 25
 
     if (!list_id) {
         res.status(500).json({ error: "Invalid parameters"})
@@ -86,7 +88,7 @@ const getTweetsForList = async (req, res, next) => {
 
     try {
         console.log('fetching tweets for list: ', list_id)
-        const response = await lists.getTweetsForList(list_id)
+        const response = await lists.getTweetsForList(list_id, count, max_id)
         console.log('tweets result: ', response)
         res.json({ tweets: response })
     } catch (error) {

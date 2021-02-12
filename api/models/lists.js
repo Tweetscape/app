@@ -42,12 +42,13 @@ const getMyLists = async (username) => {
     }
 }
 
-const getTweetsForList = async (list_id, count) => {
+const getTweetsForList = async (list_id, count, max_id) => {
     try {
         const response = await axios.get(getListUrl, {
             params: {
                 list_id,
-                count
+                count,
+                max_id
             }, headers
         })
         

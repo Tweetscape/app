@@ -14,7 +14,7 @@
 }
 
 .leftColumn {
-    border: 1px solid black;
+    border: 1px solid lightgray;
     height: 500px;
     width: 360px;
     position: sticky;
@@ -22,9 +22,10 @@
     left: 0;
     margin-right: 20px;
     margin-top: 67px;
-    top: 95px;
+    top: 105px;
     display: flex;
     flex-direction: column;
+    border-radius: 10px;
 }
 
 .twitterCard {
@@ -36,6 +37,7 @@
 }
 
 .mainFeed {
+    margin-bottom: 30px;
 }
 
 .leftHeader {
@@ -44,6 +46,16 @@
     background-color: #FCF7F8;
     justify-content: space-around;
     margin-bottom: 4px;
+}
+
+.leftHeader:first-child {
+    border-top-left-radius: 10px;
+    border: none;
+}
+
+.leftHeader:nth-child(1) {
+    border-top-right-radius: 10px;
+    border: none;
 }
 
 .headerButton {
@@ -90,4 +102,24 @@
 
 .sortLabel:hover {
     text-decoration: underline;
+}
+
+.lazyLoad {
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    top: 95px;
+    opacity: 0.4;
+    background-color: lightblue;
+    z-index: 100000;
+}
+
+.signInContainer {
+    color: black;
+    text-align: center;
+}
+
+.listColumn {
+    overflow: auto;
 }

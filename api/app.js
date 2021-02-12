@@ -75,7 +75,8 @@ app.get("/", authCheck, (req, res) => {
 });
 
 app.get(`/list/:list_id/`, asyncHandler(lists.getListData))
-app.get(`/tweets/:list_id`, asyncHandler(lists.getTweetsForList))
+app.get(`/tweets/:list_id/:maxId/`, asyncHandler(lists.getTweetsForList))
+app.get(`/tweets/:list_id/`, asyncHandler(lists.getTweetsForList))
 app.get(`/featuredLists`, asyncHandler(lists.getFeaturedLists))
 app.get(`/mylists`, asyncHandler(lists.getMyLists))
 

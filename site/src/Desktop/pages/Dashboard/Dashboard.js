@@ -5,6 +5,7 @@ import styles from './style.module.css'
 import { store } from 'utils/store'
 import TwitterCard from 'Desktop/components/TwitterCard/TwitterCard'
 import { TwitterTimelineEmbed, TwitterTweetEmbed } from 'react-twitter-embed';
+import { Tweet } from 'react-twitter-widgets'
 
 const endpoint = "https://h27pptsq0k.execute-api.us-east-1.amazonaws.com/"
 const apiEndpoint = "https://h27pptsq0k.execute-api.us-east-1.amazonaws.com/auth/login/success"
@@ -18,7 +19,9 @@ export default function Dashboard({ }) {
     const [user, setUser] = useState(null)
     const [authenticated, setAuthenticated] = useState(false)
     const [currentListIdx, setCurrentListIdx] = useState(0)
-    const [sorting, setSorting] = useState("Standard")
+    const [sorting, setSorting] = useState("Most Popular")
+    const [lazyLoad, setLazyLoad] = useState(true)
+    const [maxId, setMaxId] = useState("")
 
     const { dispatch, state: { data, tweetsLoading }} = useContext(store)
     const featuredLists = data.featuredLists
@@ -83,7 +86,14 @@ export default function Dashboard({ }) {
                             const tweets = JSON.parse(JSON.stringify(res.data.tweets))
                             console.log('setting tweets: ', tweets)
         
-                            setTwitterPosts(tweets)
+                            if (maxId) {
+                                setTwitterPosts([...twitterPosts, ...tweets])    
+                            } else {
+                                setTwitterPosts(tweets)
+                            }
+
+                            setMaxId(tweets[tweets.length - 1].id_str)
+                            setLazyLoad(true)
                         }                        
                     } else {
                         setTwitterPosts([])
@@ -108,16 +118,70 @@ export default function Dashboard({ }) {
             tweets.sort((a, b) => {
                 return a.favorite_count - b.favorite_count
             })
+        } else if (sorting === "Retweet Count") {
+            console.log('tweets: ', tweets)
+            tweets.sort((a, b) => {
+                return a.retweet_count - b.retweet_count
+            })                        
         } else {
             tweets.sort((a, b) => {
                 return new Date(a.created_at) - new Date(b.created_at)
-            })                        
+            })                                    
         }
 
         console.log('sorting: ', sorting)
 
         setTwitterPosts(tweets)
-    }, [sorting])      
+    }, [sorting])     
+    
+    useEffect(() => {
+        if (lazyLoad) {
+            setLazyLoad(false)
+            // let timeout = setTimeout(() => {
+            //     setLazyLoad(false)
+            // }, 1000)
+        }
+    }, [lazyLoad])
+
+    useEffect(() => {
+        async function fetchMore() {
+            if (maxId) {
+                console.log('max id: ', maxId)
+
+                if (tab === 1) {
+                    const url = getListTweetsEndpoint(featuredLists[currentListIdx])
+                    const res = await axios(url + maxId, { withCredentials: true })            
+                    if (res && res.data) {
+                        const tweets = JSON.parse(JSON.stringify(res.data.tweets))
+                        console.log('setting tweets: ', tweets)
+                        setTwitterPosts([...twitterPosts, ...tweets])
+                    }                
+                } else {
+                    if (myLists.length) {
+                        const url = getListTweetsEndpoint(myLists[currentListIdx].id_str) + '/' + maxId
+                        console.log('url: ', url)
+                        const res = await axios(url, { withCredentials: true })
+
+                        if (res && res.data) {
+                            const tweets = JSON.parse(JSON.stringify(res.data.tweets))
+                            console.log('tweets: ', tweets)
+
+                            const currentTweets = []
+                            console.log('current tweets: ', currentTweets)
+
+
+                            setTwitterPosts(tweets)    
+                        }                        
+                    } else {
+                        setTwitterPosts([])
+                    }    
+                }
+            }    
+        }
+
+        fetchMore()
+    
+    }, [maxId])
     
     const getListDataEndpoint = (id) => {
         return `https://h27pptsq0k.execute-api.us-east-1.amazonaws.com/list/${id}`
@@ -127,14 +191,17 @@ export default function Dashboard({ }) {
         return `https://h27pptsq0k.execute-api.us-east-1.amazonaws.com/tweets/${id}`
     }
 
-    const handleSetTab = (index) => () => setTab(index)
+    const handleSetTab = (index) => () => {
+        setCurrentListIdx(0)
+        setTab(index)
+    } 
     
     const myListsStyle = tab === 0 ? { backgroundColor: "#e2e2e2aa", borderBottom: "2px solid black" } : null 
     const featuredListsStyle = tab === 1 ? { backgroundColor: "#e2e2e2aa", borderBottom: "2px solid black" } : null 
 
     const renderLists = () => {
 
-        if (tab === 0 && myLists.length) {
+        if (tab === 0 && myLists && myLists.length) {
             return myLists.map((item, idx) => {
                 const styleObj = currentListIdx === idx ? { color: "black" } : { color: "#838383" }
                 return (
@@ -145,7 +212,7 @@ export default function Dashboard({ }) {
             })
         }
 
-        if (tab === 0 && !myLists.length) {
+        if (tab === 0 && (!myLists || !myLists.length)) {
             return (
                 <div className={styles.signInContainer}>
                     Sign in to view your lists 
@@ -153,11 +220,24 @@ export default function Dashboard({ }) {
             )
         }
 
+        const featuredListNames = [
+            "Blockchain Gaming",
+            "Crypto Art",
+            "Cryptofunds",
+            "Cryptogurus",
+            "Cryptolaw",
+            "Cryptomemes",
+            "DAO",
+            "Decentralized Finance",
+            "Gen z mafia",
+            "Systems Thinkers"
+        ]
+
         return featuredLists.map((item, idx) => {
             const styleObj = currentListIdx === idx ? { color: "black" } : { color: "#838383" }
             return (
                 <div className={styles.listRow} style={styleObj} onClick={() => setCurrentListIdx(idx)}>
-                    {item}
+                    {featuredListNames[idx] || item}
                 </div>
             )
         })
@@ -165,20 +245,28 @@ export default function Dashboard({ }) {
 
     const renderTweets = () => {
         if (tweetsLoading) {
-            return <div style={{ color: 'black' }}>Tweets are loading</div>
+            return null
         }
 
         if (twitterPosts && twitterPosts.length) {
-            console.log('twitter posts: ', twitterPosts)
-            return twitterPosts.map(post => {
-                return <TwitterCard data={post} />
+            return twitterPosts.map((post, idx) => {
+                return <Tweet tweetId={post.id_str} key={post.id_str} />
+                // return <TwitterCard data={post} />
+                // return <Tweet tweetId={post.id_str} key={post.id_str} />
+                // return <TwitterTweetEmbed tweetId={post.id_str} key={post.id_str} />
+                
             })
         }
     }
 
+    const sortOneStyle = sorting === "Most Popular" ? { textDecoration: "underline", fontWeight: "bold" } : null 
+    const sortTwoStyle = sorting === "Most Recent" ? { textDecoration: "underline", fontWeight: "bold" } : null 
+    const sortThreeStyle = sorting === "Retweet Count" ? { textDecoration: "underline", fontWeight: "bold"  } : null 
+
+    const lazyLoadStyle = lazyLoad ? { opacity: 0 } : null 
+
     return ( 
         <div className={styles.container}>
-            <div>Dashboard</div>
             <div className={styles.main}>
                 <div className={styles.leftColumn}>
                     <div className={styles.leftHeader}>
@@ -195,11 +283,13 @@ export default function Dashboard({ }) {
                 </div>
                 <div className={styles.mainFeed}>
                     <div className={styles.sortContainer}>
-                        <div className={styles.sortLabel} onClick={() => setSorting("Most Popular")}>Most Popular</div>
-                        <div className={styles.sortLabel} onClick={() => setSorting("Most Recent")}>Most Recent</div>
-                        <div className={styles.sortLabel} onClick={() => setSorting("Standard")}>Standard</div>
+                        <div className={styles.sortLabel} style={sortOneStyle} onClick={() => setSorting("Most Popular")}>Most Popular</div>
+                        <div className={styles.sortLabel} style={sortTwoStyle} onClick={() => setSorting("Most Recent")}>Most Recent</div>
+                        <div className={styles.sortLabel} style={sortThreeStyle} onClick={() => setSorting("Retweet Count")}>Retweet Count</div>
                     </div>
-                    {renderTweets()}
+                    <div style={lazyLoadStyle}>
+                        {renderTweets()}
+                    </div>
                 </div>
             </div>
         </div>
