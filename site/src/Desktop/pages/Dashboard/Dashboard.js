@@ -114,18 +114,18 @@ export default function Dashboard({ }) {
         const tweets = JSON.parse(JSON.stringify(twitterPosts)) 
         console.log('tweets: ', tweets)
         
-        if (sorting === "Most Popular") {
+        if (sorting === "Favorites") {
             tweets.sort((a, b) => {
-                return a.favorite_count - b.favorite_count
+                return b.favorite_count - a.favorite_count
             })
         } else if (sorting === "Retweet Count") {
             console.log('tweets: ', tweets)
             tweets.sort((a, b) => {
-                return a.retweet_count - b.retweet_count
+                return b.retweet_count - a.retweet_count
             })                        
         } else {
             tweets.sort((a, b) => {
-                return new Date(a.created_at) - new Date(b.created_at)
+                return  new Date(b.created_at) - new Date(a.created_at)
             })                                    
         }
 
@@ -250,8 +250,8 @@ export default function Dashboard({ }) {
 
         if (twitterPosts && twitterPosts.length) {
             return twitterPosts.map((post, idx) => {
-                return <Tweet tweetId={post.id_str} key={post.id_str} />
-                // return <TwitterCard data={post} />
+                // return <Tweet tweetId={post.id_str} key={post.id_str} />
+                return <TwitterCard data={post} />
                 // return <Tweet tweetId={post.id_str} key={post.id_str} />
                 // return <TwitterTweetEmbed tweetId={post.id_str} key={post.id_str} />
                 
@@ -259,7 +259,7 @@ export default function Dashboard({ }) {
         }
     }
 
-    const sortOneStyle = sorting === "Most Popular" ? { textDecoration: "underline", fontWeight: "bold" } : null 
+    const sortOneStyle = sorting === "Favorites" ? { textDecoration: "underline", fontWeight: "bold" } : null 
     const sortTwoStyle = sorting === "Most Recent" ? { textDecoration: "underline", fontWeight: "bold" } : null 
     const sortThreeStyle = sorting === "Retweet Count" ? { textDecoration: "underline", fontWeight: "bold"  } : null 
 
@@ -283,9 +283,9 @@ export default function Dashboard({ }) {
                 </div>
                 <div className={styles.mainFeed}>
                     <div className={styles.sortContainer}>
-                        <div className={styles.sortLabel} style={sortOneStyle} onClick={() => setSorting("Most Popular")}>Most Popular</div>
+                        <div className={styles.sortLabel} style={sortOneStyle} onClick={() => setSorting("Favorites")}>Favorites</div>
                         <div className={styles.sortLabel} style={sortTwoStyle} onClick={() => setSorting("Most Recent")}>Most Recent</div>
-                        <div className={styles.sortLabel} style={sortThreeStyle} onClick={() => setSorting("Retweet Count")}>Retweet Count</div>
+                        <div className={styles.sortLabel} style={sortThreeStyle} onClick={() => setSorting("Retweet Count")}>Retweets</div>
                     </div>
                     <div style={lazyLoadStyle}>
                         {renderTweets()}

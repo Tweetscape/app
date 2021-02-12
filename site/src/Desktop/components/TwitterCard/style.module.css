@@ -11,3 +11,26 @@
     cursor: pointer;
     background-color: lightgray;
 }
+
+.metadata {
+    display: flex;
+    flex-direction: row;
+    margin-top: 20px;
+}
+
+.metricComponent {
+    color: black;
+    display: flex;
+    flex-direction: column;
+    margin-right: 40px;
+}
+
+.metricComponent div,
+.metric {
+    color: black;
+    font-size: 18px;
+}
+
+.metric {
+    margin-right: 30px;
+}
